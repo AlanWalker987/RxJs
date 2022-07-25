@@ -1,7 +1,13 @@
 import './style.css';
 
 import { fromEvent, interval, map, of, take } from 'rxjs';
-import { takeUntil, takeWhile } from 'rxjs/operators';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  pluck,
+  takeUntil,
+  takeWhile,
+} from 'rxjs/operators';
 
 const click$ = fromEvent(document, 'click');
 
@@ -46,7 +52,7 @@ click$
 
   */
 
-/** TakeUntil Operator */
+/** TakeUntil Operator
 
 const counter$ = interval(1000);
 
@@ -54,5 +60,26 @@ counter$.pipe(takeUntil(click$)).subscribe({
   next: console.log,
   complete: () => console.log('Complete'),
 });
+
+ */
+
+/** DistinctUntilChanged 
+
+const number$ = of(1, 1, 2, 3, '3', 3, 4, 5, 5, 5, 6);
+
+number$.pipe(distinctUntilChanged()).subscribe(console.log);
+
+*/
+
+/** debounceTime 
+
+const input = document.getElementById('input-text');
+const input$ = fromEvent(input, 'keyup');
+
+input$
+  .pipe(debounceTime(1000), pluck('target', 'value'), distinctUntilChanged())
+  .subscribe(console.log);
+
+  */
 
 // Open the console in the bottom right to see results.
